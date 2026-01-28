@@ -1,0 +1,90 @@
+/* 1) Reset básico para evitar surpresas */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.4;
+}
+
+/* 2) “Container” para o conteúdo não ficar colado nas bordas */
+header,
+main,
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* 3) Cabeçalho */
+header h1 {
+  margin: 0;
+}
+
+header p {
+  margin: 8px 0 0;
+}
+
+/* 4) Separação entre blocos */
+section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+}
+
+h2 {
+  margin: 0 0 12px;
+}
+
+/* 5) Formulário arrumado (sem <br/>) */
+form {
+  display: grid;
+  gap: 12px;
+  max-width: 520px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* 6) Tabela usável */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background: #f5f5f5;
+}
+
+tbody tr:hover {
+  background: #fafafa;
+}
+
+/* 7) Mobile: permitir rolagem horizontal da tabela */
+.table-wrap {
+  overflow-x: auto;
+}
