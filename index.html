@@ -17,8 +17,8 @@
       <section>
         <h2>Resumo</h2>
         <p>Receitas: <strong id="income-total">R$ 0,00</strong></p>
-        <p>Despesas: <strong id="exspense-total">R$ 0,00</strong></p>
-        <p>Saldo: R$ 0,00<strong id="balance-total">R$ 0,00</strong></p>
+        <p>Despesas: <strong id="expense-total">R$ 0,00</strong></p>
+        <p>Saldo: <strong id="balance-total">R$ 0,00</strong></p>
       </section>
 
       <section>
@@ -58,6 +58,19 @@
         </form>
       </section>
 
+      <div class="filters">
+        <select id="filter-type">
+          <option value="all">Todas</option>
+          <option value="income">Receitas</option>
+          <option value="expense">Despesas</option>
+        </select>
+
+        <input
+          type="text"
+          id="search-text"
+          placeholder="Buscar por categoria ou descrição"
+          />
+      </div>
       <section>
         <h2>Transações</h2>
 
