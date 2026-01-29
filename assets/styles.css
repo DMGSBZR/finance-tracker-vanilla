@@ -88,3 +88,9 @@ tbody tr:hover {
 .table-wrap {
   overflow-x: auto;
 }
+.filters{
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  max-width: 520px;
+}
