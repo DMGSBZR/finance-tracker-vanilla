@@ -44,3 +44,61 @@ export function renderSummary() {
   expenseEl.textContent = formatBRL(expense);
   balanceEl.textContent = formatBRL(income - expense);
 }
+const feedbackEl = document.querySelector("#feedback");
+
+export function showFeedback(message, type = "success") {
+  if (!feedbackEl) return;
+
+  feedbackEl.textContent = message;
+  feedbackEl.classList.remove("feedback--success", "feedback--error");
+
+  if (type === "error") feedbackEl.classList.add("feedback--error");
+  else feedbackEl.classList.add("feedback--success");
+}
+
+export function clearFeedback() {
+  if (!feedbackEl) return;
+
+  feedbackEl.textContent = "";
+  feedbackEl.classList.remove("feedback--success", "feedback--error");
+}
+
+function getFieldElements(fieldId) {
+  const input = document.querySelector(`#${fieldId}`);
+  const error = document.querySelector(`#${fieldId}-error`);
+  return { input, error };
+}
+
+export function setFieldError(fieldId, message) {
+  const { input, error } = getFieldElements(fieldId);
+  if (!input || !error) return;
+
+  error.textContent = message;
+
+  input.classList.add("is-invalid");
+  input.setAttribute("aria-invalid", "true");
+  input.setAttribute("aria-describedby", `${fieldId}-error`);
+}
+
+export function clearFieldError(fieldId) {
+  const { input, error } = getFieldElements(fieldId);
+  if (!input || !error) return;
+
+  error.textContent = "";
+
+  input.classList.remove("is-invalid");
+  input.removeAttribute("aria-invalid");
+  input.removeAttribute("aria-describedby");
+}
+
+export function clearAllFieldErrors(fieldIds = []) {
+  fieldIds.forEach(clearFieldError);
+}
+
+export function focusFirstInvalid(errors) {
+  const firstField = Object.keys(errors || {})[0];
+  if (!firstField) return;
+
+  const el = document.querySelector(`#${firstField}`);
+  if (el) el.focus();
+}

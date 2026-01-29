@@ -23,36 +23,89 @@
 
       <section>
         <h2>Nova transação</h2>
+        <div
+           id="feedback"
+           class="feedback"
+           aria-live="polite"
+           aria-atomic="true"
+           ></div>
 
-        <form>
-          <div>
-            <label for="type">Tipo</label>
-            <select id="type" name="type" required>
+
+        <form id="transaction-form">
+          <div class="field">
+              <label for="type">Tipo</label>
+              <select id="type" name="type">
               <option value="">Selecione</option>
               <option value="income">Receita</option>
               <option value="expense">Despesa</option>
-            </select>
+     </select>
+
+              <!-- Mensagem de erro do campo -->
+            <small
+            id="type-error"
+            class="field-error"
+            aria-live="polite"
+            ></small>
           </div>
+
 
           <div>
             <label for="amount">Valor</label>
             <input type="number" id="amount" name="amount" min="0.01" step="0.01" required />
           </div>
 
-          <div>
-            <label for="date">Data</label>
-            <input type="date" id="date" name="date" required />
-          </div>
+          <div class="field">
+  <label for="date">Data</label>
 
-          <div>
-            <label for="category">Categoria</label>
-            <input type="text" id="category" name="category" required />
-          </div>
+  <input
+    type="date"
+    id="date"
+    name="date"
+  />
 
-          <div>
-            <label for="description">Descrição</label>
-            <input type="text" id="description" name="description" />
-          </div>
+  <small
+    id="date-error"
+    class="field-error"
+    aria-live="polite"
+  ></small>
+</div>
+
+
+          <div class="field">
+  <label for="category">Categoria</label>
+
+  <input
+    type="text"
+    id="category"
+    name="category"
+    placeholder="Ex: Mercado, Salário"
+    autocomplete="off"
+  />
+
+  <small
+    id="category-error"
+    class="field-error"
+    aria-live="polite"
+  ></small>
+</div> 
+          <div class="field">
+  <label for="description">Descrição (opcional)</label>
+
+  <input
+    type="text"
+    id="description"
+    name="description"
+    placeholder="Ex: compra do mês"
+    autocomplete="off"
+  />
+
+  <small
+    id="description-error"
+    class="field-error"
+    aria-live="polite"
+  ></small>
+</div>
+
 
           <button type="submit">Adicionar</button>
         </form>
