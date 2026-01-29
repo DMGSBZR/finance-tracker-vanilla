@@ -16,9 +16,9 @@
     <main>
       <section>
         <h2>Resumo</h2>
-        <p>Receitas: R$ 0,00</p>
-        <p>Despesas: R$ 0,00</p>
-        <p>Saldo: R$ 0,00</p>
+        <p>Receitas: <strong id="income-total">R$ 0,00</strong></p>
+        <p>Despesas: <strong id="exspense-total">R$ 0,00</strong></p>
+        <p>Saldo: R$ 0,00<strong id="balance-total">R$ 0,00</strong></p>
       </section>
 
       <section>
@@ -74,15 +74,8 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
-                <td>01/01/2024</td>
-                <td>Receita</td>
-                <td>Teste</td>
-                <td>Exemplo</td>
-                <td>R$ 100,00</td>
-                <td>-</td>
-              </tr>
+            <tbody id="transactions-body">
+              <!-- As transações serão inseridas aqui dinamicamente -->
             </tbody>
           </table>
         </div>
