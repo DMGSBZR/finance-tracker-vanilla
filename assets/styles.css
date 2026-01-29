@@ -94,3 +94,54 @@ tbody tr:hover {
   margin-bottom: 12px;
   max-width: 520px;
 }
+/* 8) aula10 */
+.feedback {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  display: none;
+}
+
+.feedback--success {
+  display: block;
+  background-color: #e9f7ee;
+  border: 1px solid #1f8a3b;
+  color: #14532d;
+}
+
+.feedback--error {
+  display: block;
+  background-color: #fdecec;
+  border: 1px solid #b42318;
+  color: #7a1210;
+}
+
+/* Cada campo do form */
+.field {
+  margin-bottom: 14px;
+}
+
+/* Erro por campo */
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #b42318;
+  min-height: 1em; /* evita pulo de layout */
+}
+
+/* Campo inválido (JS aplica esta classe) */
+.is-invalid {
+  border: 1px solid #b42318 !important;
+  background-color: #fff5f5;
+}
+
+/* Acessibilidade: foco visível */
+input:focus,
+select:focus,
+button:focus {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
