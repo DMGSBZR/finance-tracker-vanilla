@@ -1,12 +1,13 @@
 import { formatBRL } from "./utils.js";
 import { getTransactions } from "./store.js";
-import { getFilteredTransactions } from "./filters.js";
+//seletores de elementos "fixos" da UI(cache simples)
+const feedbackEl = document.querySelector("#feedback");
+const uiStateEl = document.querySelector("#ui-state");
 
-export function renderTransactions(typeFilter, search,sortBy) {
+
+export function renderTransactions(list) {
   const tbody = document.querySelector("#transactions-body");
   tbody.innerHTML = "";
-
-  const list = getFilteredTransactions(typeFilter, search,sortBy);
 
   for (const tx of list) {
     const tr = document.createElement("tr");
@@ -46,7 +47,35 @@ export function renderSummary() {
   expenseEl.textContent = formatBRL(expense);
   balanceEl.textContent = formatBRL(income - expense);
 }
-const feedbackEl = document.querySelector("#feedback");
+
+export function renderEmptyState({title, text, showClearAction = false}) {
+  if (!uiStateEl) return;
+
+  uiStateEl.innerHTML = `
+    <div class="ui-state__title">${title}</div>
+    <div class="ui-state__text">${text}</div>
+    <div class="ui-state__actions">
+      ${
+        showClearAction
+        ? '<button type="button" class="btn btn-secondary" data-action="clear">Limpar filtros e busca</button>'
+        : ""
+      }
+    </div>
+  `;
+  uiStateEl.hidden= false;
+}
+
+export function hideEmptyState() {
+  if (!uiStateEl) return;
+
+  uiStateEl.style.opacity = "0";
+
+  setTimeout(() => {
+    uiStateEl.hidden = true;
+    uiStateEl.innerHTML = "";
+    uiStateEl.style.opacity = "";
+  }, 150);
+}
 
 let feedbackTimer = null;
 

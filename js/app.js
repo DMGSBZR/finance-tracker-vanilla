@@ -8,6 +8,8 @@ import {
 import {
   renderTransactions,
   renderSummary,
+  renderEmptyState,
+  hideEmptyState,
   showFeedback,
   clearFeedback,
   setFieldError,
@@ -15,11 +17,13 @@ import {
   focusFirstInvalid,
   clearFieldError,
 } from "./ui.js";
+import { getFilteredTransactions } from "./filters.js";
 
 console.log("APP.JS carregado!");
 
 // ESTADO DE UI
 let editingId = null;
+let searchDebouceTimer = null;
 
 
 // DOM
@@ -32,12 +36,46 @@ const cancelEditBtn = document.querySelector("#cancel-edit");
 const FORM_FIELD_IDS = ["type", "amount", "date", "category", "description"];
 const submitBtn = form.querySelector('button[type="submit"]');
 const sortByEl = document.querySelector("#sort-by");
+const clearBtn = document.querySelector('#clear-filters');
+
 
 // FUNÇÕES
 
 function refresh() {
-  renderTransactions(filterTypeEl.value, searchEl.value, sortByEl.value);
+  syncClearButton();
+
+  const all = getTransactions();
+  const visible = getFilteredTransactions(
+    filterTypeEl.value,
+    searchEl.value,
+    sortByEl.value
+  );
+
+  renderTransactions(visible);
   renderSummary();
+
+  // 1) Estado vazio global
+  if (all.length === 0) {
+    renderEmptyState({
+      title: "Nenhuma transação ainda",
+      text: "Adicione sua primeira receita ou despesa para ver o resumo aqui.",
+      showClearAction: false,
+    });
+    return;
+  }
+
+  // 2) Estado vazio por filtro/busca/sort
+  if (visible.length === 0) {
+    renderEmptyState({
+      title: "Nenhuma transação encontrada",
+      text: "Ajuste a busca ou limpe os filtros para ver resultados.",
+      showClearAction: true,
+    });
+    return;
+  }
+
+  // 3) Caso normal
+  hideEmptyState();
 }
 
 form.addEventListener("submit", (event) => {
@@ -104,11 +142,16 @@ tbody.addEventListener("click", (event) => {
   const id = btn.dataset.id;
 
   if (action === "delete") {
-    deleteTransaction(id);
-    refresh();
-    showFeedback("Transação removida.", "success");
-    return;
-  }
+  deleteTransaction(id);
+  refresh();
+  showFeedback("Transação removida.", "success");
+
+  // devolve foco para a busca
+  searchEl.focus();
+
+  return;
+}
+
 
   if (action === "edit") {
   const tx = getTransactions().find((t) => t.id === id);
@@ -152,10 +195,43 @@ FORM_FIELD_IDS.forEach((id) => {
 });
 
 // FILTROS/ BUSCA/ ORDENAÇÃO  
-
 filterTypeEl.addEventListener("change", refresh);
-searchEl.addEventListener("input", refresh);
+searchEl.addEventListener("input", () => {
+  clearTimeout(searchDebounceTimer);
+
+  searchDebounceTimer = setTimeout(() => {
+    refresh();
+  }, 300);
+});
 sortByEl.addEventListener("change", refresh);
+
+clearBtn?.addEventListener("click", clearFiltersAndSearch);
+
+// Delegação: botão "Limpar" que aparece dentro do ui-state
+document.addEventListener("click", (event) => {
+  const btn = event.target.closest('[data-action="clear"]');
+  if (!btn) return;
+  clearFiltersAndSearch();
+});
+
+function syncClearButton() {
+  if (!clearBtn) return;
+
+  const hasTypeFilter = filterTypeEl.value !== "all";
+  const hasSearch = searchEl.value.trim().length > 0;
+  const hasSort = sortByEl.value !== "date-desc";
+
+  clearBtn.disabled = !(hasTypeFilter || hasSearch || hasSort);
+}
+
+function clearFiltersAndSearch() {
+  filterTypeEl.value = "all";
+  searchEl.value = "";
+  sortByEl.value = "date-desc";
+
+  searchEl.focus();
+  refresh();
+}
 
 // RENDERIZAÇÃO INICIAL
 refresh();

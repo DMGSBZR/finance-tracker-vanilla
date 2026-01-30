@@ -112,7 +112,7 @@
         </form>
       </section>
 
-      <div class="filters">
+      <section class="filters" aria-label="Filtros de transações">
         <select id="filter-type">
           <option value="all">Todas</option>
           <option value="income">Receitas</option>
@@ -124,15 +124,22 @@
           id="search-text"
           placeholder="Buscar por categoria ou descrição"
           />
+
+         <button id="clear-filters" type="button" class="btn btn-secondary" aria-label="Limpar filtros e busca" disabled>
+          Limpar 
+         </button>
+
          <select id="sort-by">
           <option value="date-desc">Data (mais recente)</option>
           <option value="date-asc">Data (mais antiga)</option>
           <option value="amount-desc">Valor (maior)</option>
           <option value="amount-asc">Valor (menor)</option>
          </select>
-      </div>
+      </section>
       <section>
         <h2>Transações</h2>
+
+        <section id="ui-state" class="ui-state" hidden aria-live="polite"></section>
 
         <div class="table-wrap">
           <table>
@@ -148,7 +155,9 @@
             </thead>
 
             <tbody id="transactions-body">
+            
               <!-- As transações serão inseridas aqui dinamicamente -->
+
             </tbody>
           </table>
         </div>

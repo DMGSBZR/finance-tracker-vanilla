@@ -93,6 +93,8 @@ tbody tr:hover {
   gap: 12px;
   margin-bottom: 12px;
   max-width: 520px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 /* 8) aula10 */
 .feedback {
@@ -144,4 +146,56 @@ select:focus,
 button:focus {
   outline: 2px solid #111;
   outline-offset: 2px;
+}
+/* Botões padrão */
+.btn {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  border-color: #555;
+  font-weight: 600;
+}
+.btn-secondary {
+  border-color: #999;
+  font-weight: 600;
+}
+
+/* Estado da UI */
+
+.ui-state {
+  transition: opacity 0.15s ease;
+}
+.ui-state {
+  border: 1px dashed #bbb;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.ui-state__title {
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.ui-state__text {
+  margin: 0 0 12px;
+  opacity: 0.9;
+}
+
+.ui-state__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
