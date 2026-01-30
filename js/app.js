@@ -31,9 +31,12 @@ const tbody = document.querySelector("#transactions-body");
 const cancelEditBtn = document.querySelector("#cancel-edit");
 const FORM_FIELD_IDS = ["type", "amount", "date", "category", "description"];
 const submitBtn = form.querySelector('button[type="submit"]');
+const sortByEl = document.querySelector("#sort-by");
+
+// FUNÇÕES
 
 function refresh() {
-  renderTransactions(filterTypeEl.value, searchEl.value);
+  renderTransactions(filterTypeEl.value, searchEl.value, sortByEl.value);
   renderSummary();
 }
 
@@ -148,4 +151,11 @@ FORM_FIELD_IDS.forEach((id) => {
   });
 });
 
+// FILTROS/ BUSCA/ ORDENAÇÃO  
+
+filterTypeEl.addEventListener("change", refresh);
+searchEl.addEventListener("input", refresh);
+sortByEl.addEventListener("change", refresh);
+
+// RENDERIZAÇÃO INICIAL
 refresh();

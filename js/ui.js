@@ -2,11 +2,11 @@ import { formatBRL } from "./utils.js";
 import { getTransactions } from "./store.js";
 import { getFilteredTransactions } from "./filters.js";
 
-export function renderTransactions(typeFilter, search) {
+export function renderTransactions(typeFilter, search,sortBy) {
   const tbody = document.querySelector("#transactions-body");
   tbody.innerHTML = "";
 
-  const list = getFilteredTransactions(typeFilter, search);
+  const list = getFilteredTransactions(typeFilter, search,sortBy);
 
   for (const tx of list) {
     const tr = document.createElement("tr");
