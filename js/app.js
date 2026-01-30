@@ -1,3 +1,4 @@
+import { renderLoadingRows } from "./ui.js";
 import { createId, validateTransaction } from "./utils.js";
 import {
   addTransaction,
@@ -10,6 +11,7 @@ import {
   renderSummary,
   renderEmptyState,
   hideEmptyState,
+  renderLoadingRows,
   showFeedback,
   clearFeedback,
   setFieldError,
@@ -18,12 +20,12 @@ import {
   clearFieldError,
 } from "./ui.js";
 import { getFilteredTransactions } from "./filters.js";
-
 console.log("APP.JS carregado!");
 
 // ESTADO DE UI
 let editingId = null;
 let searchDebouceTimer = null;
+let refreshToken = 0;
 
 
 // DOM
@@ -44,38 +46,46 @@ const clearBtn = document.querySelector('#clear-filters');
 function refresh() {
   syncClearButton();
 
-  const all = getTransactions();
-  const visible = getFilteredTransactions(
-    filterTypeEl.value,
-    searchEl.value,
-    sortByEl.value
-  );
+  // incrementa token — invalida timeouts anteriores
+  refreshToken += 1;
+  const token = refreshToken;
 
-  renderTransactions(visible);
-  renderSummary();
+  renderLoadingRows(3);
 
-  // 1) Estado vazio global
-  if (all.length === 0) {
-    renderEmptyState({
-      title: "Nenhuma transação ainda",
-      text: "Adicione sua primeira receita ou despesa para ver o resumo aqui.",
-      showClearAction: false,
-    });
-    return;
-  }
+  setTimeout(() => {
+    // se esse refresh não é mais o mais recente, ignora
+    if (token !== refreshToken) return;
 
-  // 2) Estado vazio por filtro/busca/sort
-  if (visible.length === 0) {
-    renderEmptyState({
-      title: "Nenhuma transação encontrada",
-      text: "Ajuste a busca ou limpe os filtros para ver resultados.",
-      showClearAction: true,
-    });
-    return;
-  }
+    const all = getTransactions();
+    const visible = getFilteredTransactions(
+      filterTypeEl.value,
+      searchEl.value,
+      sortByEl.value
+    );
 
-  // 3) Caso normal
-  hideEmptyState();
+    renderTransactions(visible);
+    renderSummary();
+
+    if (all.length === 0) {
+      renderEmptyState({
+        title: "Nenhuma transação ainda",
+        text: "Adicione sua primeira receita ou despesa para ver o resumo aqui.",
+        showClearAction: false,
+      });
+      return;
+    }
+
+    if (visible.length === 0) {
+      renderEmptyState({
+        title: "Nenhuma transação encontrada",
+        text: "Ajuste a busca ou limpe os filtros para ver resultados.",
+        showClearAction: true,
+      });
+      return;
+    }
+
+    hideEmptyState();
+  }, 150);
 }
 
 form.addEventListener("submit", (event) => {
@@ -142,16 +152,19 @@ tbody.addEventListener("click", (event) => {
   const id = btn.dataset.id;
 
   if (action === "delete") {
-  deleteTransaction(id);
-  refresh();
-  showFeedback("Transação removida.", "success");
+  const row = btn.closest("tr");
+  row?.classList.add("is-removing");
 
-  // devolve foco para a busca
-  searchEl.focus();
+  // espera a transição e então remove de fato
+  setTimeout(() => {
+    deleteTransaction(id);
+    refresh();
+    showFeedback("Transação removida.", "success");
+    searchEl.focus();
+  }, 150);
 
   return;
 }
-
 
   if (action === "edit") {
   const tx = getTransactions().find((t) => t.id === id);

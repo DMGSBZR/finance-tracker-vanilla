@@ -11,6 +11,7 @@ export function renderTransactions(list) {
 
   for (const tx of list) {
     const tr = document.createElement("tr");
+    tr.dataset.id = tx.id;
     const typeLabel = tx.type === "income" ? "Receita" : "Despesa";
 
     tr.innerHTML = `
@@ -143,4 +144,26 @@ export function focusFirstInvalid(errors) {
 
   const el = document.querySelector(`#${firstField}`);
   if (el) el.focus();
+}
+export function renderLoadingRows(count = 3) {
+  const tbody = document.querySelector("#transactions-body");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  for (let i = 0; i < count; i++) {
+    const tr = document.createElement("tr");
+    tr.className = "skeleton-row";
+
+    tr.innerHTML = `
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    `;
+
+    tbody.appendChild(tr);
+  }
 }
