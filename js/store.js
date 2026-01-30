@@ -31,3 +31,9 @@ export function deleteTransaction(id) {
   transactions = transactions.filter((tx) => tx.id !== id);
   saveTransactions();
 }
+export function updateTransaction(updatedTx) {
+  transactions = transactions.map((tx) =>
+    tx.id === updatedTx.id ? updatedTx : tx
+  );
+  saveTransactions();
+}

@@ -19,6 +19,7 @@ export function renderTransactions(typeFilter, search) {
       <td>${tx.description || ""}</td>
       <td>${formatBRL(tx.amount)}</td>
       <td>
+        <button data-action="edit" data-id="${tx.id}">Editar</button>
         <button data-action="delete" data-id="${tx.id}">Excluir</button>
       </td>
     `;
@@ -26,6 +27,7 @@ export function renderTransactions(typeFilter, search) {
     tbody.appendChild(tr);
   }
 }
+
 
 export function renderSummary() {
   const incomeEl = document.querySelector("#income-total");
@@ -46,6 +48,8 @@ export function renderSummary() {
 }
 const feedbackEl = document.querySelector("#feedback");
 
+let feedbackTimer = null;
+
 export function showFeedback(message, type = "success") {
   if (!feedbackEl) return;
 
@@ -54,7 +58,16 @@ export function showFeedback(message, type = "success") {
 
   if (type === "error") feedbackEl.classList.add("feedback--error");
   else feedbackEl.classList.add("feedback--success");
+
+  // auto-hide (principalmente para sucesso)
+  if (feedbackTimer) clearTimeout(feedbackTimer);
+
+  const ms = type === "success" ? 2500 : 5000;
+  feedbackTimer = setTimeout(() => {
+    clearFeedback();
+  }, ms);
 }
+
 
 export function clearFeedback() {
   if (!feedbackEl) return;
