@@ -1,4 +1,3 @@
-import { renderLoadingRows } from "./ui.js";
 import { createId, validateTransaction } from "./utils.js";
 import {
   addTransaction,
@@ -24,7 +23,7 @@ console.log("APP.JS carregado!");
 
 // ESTADO DE UI
 let editingId = null;
-let searchDebouceTimer = null;
+let searchDebounceTimer = null;
 let refreshToken = 0;
 
 
@@ -46,17 +45,26 @@ const clearBtn = document.querySelector('#clear-filters');
 function refresh() {
   syncClearButton();
 
-  // incrementa token — invalida timeouts anteriores
   refreshToken += 1;
   const token = refreshToken;
+
+  const allNow = getTransactions();
+  if (allNow.length === 0) {
+    renderTransactions([]);
+    renderSummary();
+    renderEmptyState({
+      title: "Nenhuma transação ainda",
+      text: "Adicione sua primeira receita ou despesa para ver o resumo aqui.",
+      showClearAction: false,
+    });
+    return;
+  }
 
   renderLoadingRows(3);
 
   setTimeout(() => {
-    // se esse refresh não é mais o mais recente, ignora
     if (token !== refreshToken) return;
 
-    const all = getTransactions();
     const visible = getFilteredTransactions(
       filterTypeEl.value,
       searchEl.value,
@@ -65,15 +73,6 @@ function refresh() {
 
     renderTransactions(visible);
     renderSummary();
-
-    if (all.length === 0) {
-      renderEmptyState({
-        title: "Nenhuma transação ainda",
-        text: "Adicione sua primeira receita ou despesa para ver o resumo aqui.",
-        showClearAction: false,
-      });
-      return;
-    }
 
     if (visible.length === 0) {
       renderEmptyState({
